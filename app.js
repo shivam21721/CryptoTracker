@@ -1,9 +1,12 @@
 const form = document.querySelector('#searchForm');
 const res = document.querySelector('#result');
 const cont = document.getElementById("allContaint");
+var upd;
 
 form.addEventListener('submit',(e)=>{
     e.preventDefault();
+    if(upd)
+    clearTimeout(upd);
     const ctype = form.elements.coinType.value;
     cont.classList.add('mainClick');
     cont.classList.remove('main');    
@@ -14,6 +17,7 @@ form.addEventListener('submit',(e)=>{
 const fetchPrice = async(ctype) =>{
     const r = await axios.get(`https://api.coinstats.app/public/v1/coins/${ctype}?currency=USD`);
     showPrice(r.data.coin);
+    upd = setTimeout(()=>fetchPrice(ctype),10000);
 }
 
 
@@ -27,8 +31,8 @@ const showPrice = (coinData)=>{
     if(change<0){
         col = "red";
     }
-    res.innerHTML = `<table class="p-4 col-md-7 " border="1px" border-radius="50%" style="background-color: white; font-weight: 700;" id="resTable">
-    <tr  style="color: #14213d; background-color:#abbce0">
+    res.innerHTML = `<table class="p-4 col-md-7 "  style="background-color: white; font-weight: 700;border: 5px solid yellow " id="resTable">
+    <tr  style="color: white; background-color:blue">
     <td>
         Property
     </td>
@@ -50,4 +54,5 @@ const showPrice = (coinData)=>{
 </tr>
     
     </table>`;
+    
 };
